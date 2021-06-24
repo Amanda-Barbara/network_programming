@@ -105,6 +105,30 @@ strace: Process 85 attached
 
 ```
 * PID为85、PPID为1的进程接收到PID为119、PPID为0的发送的SIGTERM信号，终止进程执行
+* kill -数字 进程id，参数中的数字代表signal.h头文件中的宏定义SIGUP,进程171接收到了145进程发送的SIGUP信号，在父进程132的终端子进程为171的进程终止程序执行，同时被跟踪的进程171也返回了进程被终止的信息
+```
+PID    PPID     SID TT          PGRP COMMAND
+1       0       1 pts/0          1 bash
+132     0       132 pts/4        132 bash
+145     0       145 pts/5        145 bash
+158     0       158 pts/6        158 bash
+171     132     132 pts/4        171 nginx
+```
+```bash
+kill -1 171
+```
+```bash
+strace -e trace=signal -p 171
+```
+
+```
+strace: Process 171 attached
+--- SIGHUP {si_signo=SIGHUP, si_code=SI_USER, si_pid=145, si_uid=0} ---
++++ killed by SIGHUP +++
+```
+* kill -number PID 参考[信号头文件中的宏定义](#信号（SIG）的基本概念)
+* kill参数表![](./docs/kill参数.png)
+
 ## 进程的状态
 
 ##  常用的信号列举
