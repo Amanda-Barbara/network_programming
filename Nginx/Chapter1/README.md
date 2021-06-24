@@ -26,13 +26,15 @@
 1. 通过镜像启用多容器
 * 创建并启用nginx0容器
 ```bash
-docker run --name nginx0 -v /home/amanda/project/tutorial/network_programming:/network_programming -it darknet_yolov4:v2 /bin/bash
+docker run --name nginx0 -v /home/amanda/project/tutorial/network_programming:/network_programming -it --cap-add=SYS_PTRACE darknet_yolov4:v2 /bin/bash
 apt-get install inetutils-ping 
+apt-get install strace -y
 ```
 * 创建并启用nginx1容器
 ```bash
-docker run --name nginx1 -v /home/amanda/project/tutorial/network_programming:/network_programming -it darknet_yolov4:v2 /bin/bash
+docker run --name nginx1 -v /home/amanda/project/tutorial/network_programming:/network_programming -it --cap-add=SYS_PTRACE darknet_yolov4:v2 /bin/bash
 apt-get install inetutils-ping 
+apt-get install strace -y
 ```
 2. 测试容器间通信
 * 进入nginx1容器输入以下命令查看虚拟网路的配置：
