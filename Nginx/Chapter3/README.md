@@ -64,6 +64,13 @@ xargs的作用是把找到的signal.h文件的内容送到grep的查找管道中
 </code></pre>
 </details>  
 
+4. 通过kill命令认识信号
+* kill的功能是发送信号给进程，能够发送多种信号给进程，执行[nginx](./src/nginx.c)程序
+```bash
+gcc -o nginx nginx.c
+ps -eo pid,ppid,sid,tty,pgrp,comm | grep -E 'bash|PID|nginx'
+```
+
 ## 通过kill命令认识一些信号
 
 ## 进程的状态
