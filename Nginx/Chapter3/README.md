@@ -75,29 +75,36 @@ cd /network_programming/Nginx/Chapter3/src/
 gcc -o nginx nginx.c   
 ps -eo pid,ppid,sid,tty,pgrp,comm | grep -E 'bash|PID|nginx'
 ```
+* 进程信息
 ```
-PID    PPID     SID TT         PGRP COMMAND
-1        0       1 pts/0          1 bash
-54       1       1 pts/0         54 nginx
-55       0      55 pts/1         55 bash
+PID    PPID     SID TT      PGRP COMMAND
+1       0       1 pts/0      1 bash
+85       1       1 pts/0     85 nginx
+86       0      86 pts/1     86 bash
+103       0     103 pts/2    103 bash
+
 ```
+![查看进程](./docs/查看进程id.png)
 
 ## 通过kill命令认识一些信号
 * 使用strace跟踪进程状态
 ```bash
-strace -e trace=signal -p 54
+strace -e trace=signal -p 85
 ```
-* 终止id为54的进程
+strace: Process 85 attached
+
+* 终止id为85的进程
 ```bash
-kill 54
+kill 85
 ```
 * 被跟踪的进程终止后的跟踪状态返回消息
 ```
-strace: Process 54 attached
----SIGTERM {si_pid=55}
+strace: Process 85 attached
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=119, si_uid=0} ---
 +++ killed by SIGTERM +++
+
 ```
-* PID为54、PPID为1的进程接收到PID为55、PPID为0的发送的SIGTERM信号，终止进程执行
+* PID为85、PPID为1的进程接收到PID为119、PPID为0的发送的SIGTERM信号，终止进程执行
 ## 进程的状态
 
 ##  常用的信号列举

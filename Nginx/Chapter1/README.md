@@ -36,6 +36,7 @@ docker run --name nginx1 -v /home/amanda/project/tutorial/network_programming:/n
 apt-get install inetutils-ping 
 apt-get install strace -y
 ```
+--cap-add=SYS_PTRACE 允许容器使用strace命令跟踪进程状态 
 2. 测试容器间通信
 * 进入nginx1容器输入以下命令查看虚拟网路的配置：
 ```bash
