@@ -13,10 +13,10 @@ void muNEfunc(int value)
 void sig_usr(int signo)
 {
     //不可重入函数的错误演示
-    int* p;
-    p = (int*)malloc(sizeof(int));
-    free(p);
-    
+    // int* p;
+    // p = (int*)malloc(sizeof(int));
+    // free(p);
+
     //不可重入函数的安全演示
     int myerrno = errno;
     int tmpsign = g_mysign;
