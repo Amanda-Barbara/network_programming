@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h>
 
 int g_mysign = 0;
 void muNEfunc(int value)
@@ -11,6 +12,14 @@ void muNEfunc(int value)
 //信号处理函数
 void sig_usr(int signo)
 {
+    //不可重入函数的错误演示
+    int* p;
+    p = (int*)malloc(sizeof(int));
+    free(p);
+    
+    //不可重入函数的安全演示
+    int myerrno = errno;
+    int tmpsign = g_mysign;
     muNEfunc(22);
     if (signo == SIGUSR1)
     {
@@ -24,6 +33,10 @@ void sig_usr(int signo)
     {
         printf("收到了未捕捉的信号%d！\n", signo);
     }
+
+    //不可重入函数的安全演示
+    g_mysign = tmpsign;
+    errno == myerrno;
     
 }
 
@@ -39,12 +52,15 @@ int main(int argc, char* const *argv)
     }
     for(;;)
     {
-        sleep(1);
-        printf("休息1秒\n");
+        // sleep(1);
+        // printf("休息1秒\n");
+        int* p;
+        p = (int*) malloc(sizeof(int));
+        free(p);
 
-        muNEfunc(15);
+        // muNEfunc(15);
         //sig_usr恰巧在此刻执行，把g_mysign的值修改了，那么程序是不安全的
-        printf("g_mysign=%d\n",g_mysign);
+        // printf("g_mysign=%d\n",g_mysign);
     }
     printf("再见！\n");
     return 0;
