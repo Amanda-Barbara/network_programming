@@ -3,9 +3,15 @@
 #include <unistd.h>
 #include <signal.h>
 
+int g_mysign = 0;
+void muNEfunc(int value)
+{
+    g_mysign = value;
+}
 //信号处理函数
 void sig_usr(int signo)
 {
+    muNEfunc(22);
     if (signo == SIGUSR1)
     {
         printf("收到了SIGUSR1信号！\n");
@@ -35,6 +41,10 @@ int main(int argc, char* const *argv)
     {
         sleep(1);
         printf("休息1秒\n");
+
+        muNEfunc(15);
+        //sig_usr恰巧在此刻执行，把g_mysign的值修改了，那么程序是不安全的
+        printf("g_mysign=%d\n",g_mysign);
     }
     printf("再见！\n");
     return 0;
