@@ -92,6 +92,87 @@ b) 同一个信号会排队阻塞
 </code></pre>
 </details>  
 
+4. 信号的阻塞
+* 如果不希望进程在接到信号时中断当前的信号处理函数，也不希望忽略该信号，而是延时一段时间再处理这个信号，这种情况可以通过阻塞信号来实现。
+* 信号的阻塞和忽略是不同的，被阻塞的信号不会影响进程的行为，信号只是暂时被进程阻止传递，
+* 信号的忽略是指信号被传递给进程，进程将其丢失，
+* 执行信号的处理动作称为信号递达（Delivery），信号从产生到递达之间的状态称为信号未决（Pending）。
+a) 执行  
+```bash
+./nginx3_5_3
+```
+b)打开另一个终端执行  
+```bash
+kill -15 347
+kill -9  347
+```
+c)结果如下：
+<details><summary>展开/收起</summary>
+<pre><code>
+ii=1
+ii=2
+ii=3
+ii=4
+ii=5
+ii=6
+ii=7
+ii=8
+ii=9
+ii=10
+ii=11
+ii=12
+ii=13
+ii=14
+ii=15
+ii=16
+ii=17
+ii=18
+ii=19
+ii=20
+ii=21
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+sig=15
+jj(15)=1
+jj(15)=2
+jj(15)=3
+jj(15)=4
+jj(15)=5
+ii=22
+ii=23
+ii=24
+Killed
+</code></pre>
+</details>  
+
 
 
 ```
@@ -122,5 +203,32 @@ typedef struct{
     unsigned long sig[2];
 }sigset_t;
 ```
+
 ## 信号相关函数
+1. int sigemptyset(sigset_t* set)
+* sigemptyset()清空set信号集
+2. int sigfillset(sigset_t* set)
+* 把所有的信号添加到set
+3. int sigaddset(sigset_t* set, int signum)
+* 把signum信号加入到set信号集
+4. int sigdelset(sigset_t* set, int signum)
+* 把signum信号从信号集set中删除
+5. int sigismember(const sigset_t* set, int signum)
+* 判断signum信号是否在信号集set中
+6. sigprocmask(int how, const sigset_t* set, sigset_t* oldset)
+* 根据how来判断是否阻塞信号set
+7. int sigaction(int signum, const struct sigaction* act, struct sigaction* oldact)
+* sigaction结构体定义  
+a) struct sigaction {
+    void (*sa_handler)(int)
+    void (*sa_sigaction)(int, siginfo_t*, void*);
+    sigset_t sa_mask;
+    int sa_flags;
+    void (*sa_restorer)(void);
+}  
+b) 
+
+
 ## sigprocmask等信号函数的范例演示
+
+
