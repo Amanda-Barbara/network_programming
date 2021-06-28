@@ -9,7 +9,12 @@ void exectask()
 
 void func(int sig)
 {
-    printf("收到了信号%d\n", sig);
+    for (int i = 0; i < 6; i++)
+    {
+        printf("收到了信号%d，第%d\n", sig, i);
+        sleep(1);
+    }
+    
 }
 
 int main()
